@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(pip install:*)",
+      "Bash(alembic init:*)",
+      "Bash(alembic revision:*)",
+      "Bash(docker-compose:*)",
+      "Bash(docker compose:*)",
+      "Bash(alembic upgrade:*)",
+      "Bash(uvicorn:*)",
+      "Bash(curl:*)",
+      "Bash(sqlite3:*)",
+      "Bash(python seed_data.py:*)",
+      "Bash(grep:*)",
+      "Bash(python:*)",
+      "Bash(npm create:*)"
+    ]
+  }
+}
