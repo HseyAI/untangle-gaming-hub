@@ -10,6 +10,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 import logging
 
 from .config import settings
+from .exceptions import AppException
 
 # Configure logging
 logging.basicConfig(
@@ -38,6 +39,20 @@ app.add_middleware(
 
 
 # Exception handlers
+@app.exception_handler(AppException)
+async def app_exception_handler(request: Request, exc: AppException):
+    """Handle custom application exceptions."""
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "success": False,
+            "error": exc.message,
+            "code": exc.code,
+            "status_code": exc.status_code
+        }
+    )
+
+
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     """Handle HTTP exceptions."""
