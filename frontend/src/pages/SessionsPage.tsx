@@ -18,7 +18,7 @@ export default function SessionsPage() {
     try {
       setIsLoading(true)
       const [allData, activeData] = await Promise.all([
-        sessionsApi.list({ page_size: 100 }),
+        sessionsApi.list({}),
         sessionsApi.getActive(),
       ])
       setSessions(allData.sessions || allData.items || [])

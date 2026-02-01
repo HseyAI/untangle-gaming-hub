@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { membersApi } from '../services/api'
 import type { Member } from '../types'
-import { Search, Plus, Phone, Mail, Clock } from 'lucide-react'
+import { Search, Plus, Phone, Mail, Clock, Users } from 'lucide-react'
 
 export default function MembersPage() {
   const [members, setMembers] = useState<Member[]>([])
