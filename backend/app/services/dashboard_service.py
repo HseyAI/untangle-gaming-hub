@@ -67,7 +67,7 @@ def get_overall_stats(db: Session, branch_id: Optional[str] = None) -> dict:
 
     # Active sessions
     active_sessions = db.query(GamingSession).filter(
-        GamingSession.end_time.is_(None)
+        GamingSession.time_end.is_(None)
     ).count()
 
     # Members expiring in next 30 days
@@ -144,13 +144,13 @@ def get_revenue_stats(db: Session, branch_id: Optional[str] = None) -> dict:
         Purchase.purchase_date >= first_day_this_month
     ).count()
 
-    # Payment methods breakdown
-    payment_methods = {}
-    for method in ["cash", "dodo", "card"]:
-        amount = query.filter(Purchase.payment_method == method).with_entities(
-            func.sum(Purchase.amount_paid)
-        ).scalar() or Decimal("0.0")
-        payment_methods[method] = float(amount)
+    # Payment methods breakdown - TODO: Add payment_method field to Purchase model
+    # payment_methods = {}
+    # for method in ["cash", "dodo", "card"]:
+    #     amount = query.filter(Purchase.payment_method == method).with_entities(
+    #         func.sum(Purchase.amount_paid)
+    #     ).scalar() or Decimal("0.0")
+    #     payment_methods[method] = float(amount)
 
     return {
         "total_revenue": Decimal(str(total_revenue)),
@@ -158,8 +158,8 @@ def get_revenue_stats(db: Session, branch_id: Optional[str] = None) -> dict:
         "revenue_last_month": Decimal(str(revenue_last_month)),
         "average_purchase_value": Decimal(str(average_purchase_value)),
         "total_purchases": total_purchases,
-        "purchases_this_month": purchases_this_month,
-        "payment_methods": payment_methods
+        "purchases_this_month": purchases_this_month
+        # "payment_methods": payment_methods  # TODO: Add after implementing payment_method field
     }
 
 
