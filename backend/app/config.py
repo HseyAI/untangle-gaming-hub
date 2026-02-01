@@ -2,7 +2,9 @@
 Application configuration using Pydantic Settings.
 """
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import List
+from pydantic import field_validator
+from typing import List, Union
+import json
 
 
 class Settings(BaseSettings):
@@ -31,13 +33,26 @@ class Settings(BaseSettings):
     DODO_BASE_URL: str = "https://api.dodopayments.com/v1"
 
     # CORS
-    ALLOWED_ORIGINS: List[str] = [
+    ALLOWED_ORIGINS: Union[List[str], str] = [
         "http://localhost:3000",
         "http://localhost:5173",
         "http://localhost:8000",
         # Add your production frontend URL here after deployment
         # Example: "https://untangle-frontend.vercel.app"
     ]
+
+    @field_validator('ALLOWED_ORIGINS', mode='before')
+    @classmethod
+    def parse_cors(cls, v):
+        """Parse ALLOWED_ORIGINS from various formats."""
+        if isinstance(v, str):
+            # Try JSON first
+            try:
+                return json.loads(v)
+            except json.JSONDecodeError:
+                # Fall back to comma-separated
+                return [origin.strip() for origin in v.split(',') if origin.strip()]
+        return v
 
     # Application
     ENVIRONMENT: str = "development"
