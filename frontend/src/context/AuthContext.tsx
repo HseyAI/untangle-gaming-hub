@@ -23,9 +23,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       authApi
         .getMe()
         .then((userData) => setUser(userData))
-        .catch(() => {
+        .catch((error) => {
+          // Clear invalid tokens
+          console.log('Auto-login failed, clearing tokens:', error.message)
           localStorage.removeItem('access_token')
           localStorage.removeItem('refresh_token')
+          setUser(null)
         })
         .finally(() => setIsLoading(false))
     } else {
