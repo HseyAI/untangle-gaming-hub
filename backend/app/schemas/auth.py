@@ -2,6 +2,7 @@
 Pydantic schemas for authentication.
 """
 from typing import Optional
+from datetime import datetime
 from pydantic import BaseModel, EmailStr, Field
 
 
@@ -41,11 +42,14 @@ class UserResponse(BaseModel):
     is_active: bool
     is_verified: bool
     oauth_provider: Optional[str]
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True
+        json_encoders = {
+            datetime: lambda v: v.isoformat()
+        }
 
 
 class UserUpdate(BaseModel):
